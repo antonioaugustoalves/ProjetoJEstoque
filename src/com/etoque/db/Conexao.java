@@ -10,5 +10,10 @@ package com.etoque.db;
  * @author ANTONIO
  */
 public class Conexao {
+    final static String USER = "root";
+    final static String PASSWORD = "usbw";
+    final static String DATABASE = "jestoque";
+    final static String SERVER = "jdbc:mysql://localhost:3307/"+DATABASE;
+    
     
 }
