@@ -26,7 +26,6 @@ public class Conexao {
             Class.forName(DRIVER);
             return DriverManager.getConnection(SERVER, USER, PASSWORD);
         }catch(ClassNotFoundException ex){
-            ex.printStackTrace();
             return null;
             
         }
