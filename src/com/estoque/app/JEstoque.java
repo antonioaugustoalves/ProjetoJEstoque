@@ -5,7 +5,7 @@
  */
 package com.estoque.app;
 
-import com.estoque.models.Cliente;
+import com.estoque.app.models.Cliente;
 
 /**
  *

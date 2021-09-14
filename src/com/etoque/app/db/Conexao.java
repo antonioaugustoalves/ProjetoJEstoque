@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.etoque.db;
+package com.etoque.app.db;
 
 import java.sql.SQLException;
 import java.sql.Connection;
