@@ -7,6 +7,7 @@ package com.etoque.db;
 
 import java.sql.SQLException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 
 /**
  *
@@ -21,9 +22,24 @@ public class Conexao {
     final static String DRIVER = "com.mysql.cj.jdbc.Driver";
     
     public static Connection getConnection() throws SQLException{
-        
+        try{
+            Class.forName(DRIVER);
+            return DriverManager.getConnection(SERVER, USER, PASSWORD);
+        }catch(ClassNotFoundException ex){
+            ex.printStackTrace();
+            return null;
+            
+        }
     }
     
     
-    
+    public static void main(String[] args) {
+        Connection con;
+        try{
+            con = Conexao.getConnection();
+            System.out.println("Servidor on-line");
+        }catch(SQLException ex){
+            System.out.println("Servidor off-line");
+        }
+    }
 }
