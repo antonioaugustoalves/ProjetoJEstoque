@@ -17,28 +17,28 @@ public class Conexao {
     final static String USER = "root";
     final static String PASSWORD = "usbw";
     final static String DATABASE = "jestoque";
+    
     final static String SERVER = "jdbc:mysql://localhost:3307/"
-            +DATABASE+"?useTimezone=true&serverTimezone=UTC";
-    final static String DRIVER = "com.mysql.cj.jdbc.Driver";
+            +DATABASE+"?useTimezone=true&serverTimeZone=UTC";
+    
+    final static String DRIVER="com.mysql.cj.jdbc.Driver";
     
     public static Connection getConnection() throws SQLException{
         try{
-            Class.forName(DRIVER);
-            return DriverManager.getConnection(SERVER, USER, PASSWORD);
-        }catch(ClassNotFoundException ex){
+          Class.forName(DRIVER);
+          return DriverManager.getConnection(SERVER, USER, PASSWORD);
+        }catch(ClassNotFoundException error){
+            error.getMessage();
             return null;
-            
         }
     }
-    
-    
+    //teste
     public static void main(String[] args) {
-        Connection con;
         try{
-            con = Conexao.getConnection();
-            System.out.println("Servidor on-line");
-        }catch(SQLException ex){
-            System.out.println("Servidor off-line");
+          Connection con = Conexao.getConnection();
+            System.out.println("Servidor está online!");
+        }catch(SQLException erro){
+            System.out.println("Servidor offline");
         }
     }
 }
