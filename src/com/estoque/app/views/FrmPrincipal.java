@@ -5,22 +5,6 @@
  */
 package com.estoque.app.views;
 
-import com.etoque.app.db.Conexao;
-import java.sql.SQLException;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.ResultSet;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.view.JasperViewer;
-
 /**
  *
  * @author ANTONIO
@@ -47,6 +31,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -57,6 +42,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Estoque");
+
+        jMenuItem2.setText("Nova Categoria");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Movimento");
@@ -92,22 +86,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        /**String sql ="SELECT id, cidade, estado FROM cidade";
-        try{
-            Connection con = Conexao.getConnection();
-            Statement stm = con.createStatement();
-            ResultSet rs = stm.executeQuery(sql);
-            JasperDesign design = JRXmlLoader.load("C:\\Users\\ANTONIO ALVES\\JaspersoftWorkspace\\MyReports\\Coffee.jrxml");
-            JRDesignQuery query = new JRDesignQuery();
-            query.setText(sql);
-            design.setQuery(query);
-            JasperReport report = JasperCompileManager.compileReport(design);
-            JasperPrint print = JasperFillManager.fillReport(report, null, con);
-            JasperViewer.viewReport(print);
-        }catch(SQLException | JRException ex){
-           ex.printStackTrace();
-        }**/
+       
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        FrmCategoria frmCat = new FrmCategoria();
+        frmCat.setLocationRelativeTo(frmCat);
+        frmCat.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -151,5 +138,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     // End of variables declaration//GEN-END:variables
 }
