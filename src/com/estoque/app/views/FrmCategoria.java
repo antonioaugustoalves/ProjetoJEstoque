@@ -195,9 +195,7 @@ public class FrmCategoria extends javax.swing.JFrame {
             JasperViewer jv = new JasperViewer(jp);
             jv.setVisible(true);
             jv.toFront();
-        } catch (JRException ex) {
-            Logger.getLogger(FrmCategoria.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (JRException | SQLException ex) {
             Logger.getLogger(FrmCategoria.class.getName()).log(Level.SEVERE, null, ex);
         }
    
