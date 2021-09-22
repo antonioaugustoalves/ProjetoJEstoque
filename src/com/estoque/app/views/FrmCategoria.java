@@ -6,13 +6,24 @@
 package com.estoque.app.views;
 
 import com.etoque.app.db.Conexao;
+import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -20,38 +31,41 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmCategoria extends javax.swing.JFrame {
 
-    private void consultaTabela(){
+    private void consultaTabela() {
         String sql = "SELECT id, nome FROM categoria "
-                +"ORDER BY nome";
+                + "ORDER BY nome";
         String colunas[] = {"Id", "Categoria"};
         tabela.removeAll();
-        try{
-          Connection con = Conexao.getConnection();
-          Statement stm = con.createStatement();
-          ResultSet rs = stm.executeQuery(sql);
-          //Matriz da tabela do Banco de dados
-          Object [][] dados = { , };
-          tabela.setModel(new DefaultTableModel(dados, colunas){});
-          DefaultTableModel dtm = (DefaultTableModel)tabela.getModel();
-          
-          //Preenchendo os dados na tabela do Form
-          while(rs.next()){
-              dtm.addRow(new String[]{ 
-                  rs.getString("id"),
-                  rs.getString("nome")
-              });
-          }
-                  
-        }catch(SQLException error){
+        try {
+            Connection con = Conexao.getConnection();
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery(sql);
+            //Matriz da tabela do Banco de dados
+            Object[][] dados = { ,
+            };
+          tabela.setModel(new DefaultTableModel(dados, colunas) {
+            });
+          DefaultTableModel dtm = (DefaultTableModel) tabela.getModel();
+
+            //Preenchendo os dados na tabela do Form
+            while (rs.next()) {
+                dtm.addRow(new String[]{
+                    rs.getString("id"),
+                    rs.getString("nome")
+                });
+            }
+
+        } catch (SQLException error) {
             JOptionPane.showMessageDialog(null,
                     "Erro ao carregar os dados do servidor:\n"
-                +error.getMessage());
+                    + error.getMessage());
         }
     }
+
     public FrmCategoria() {
         initComponents();
         consultaTabela();
-        
+
     }
 
     /**
@@ -172,7 +186,24 @@ public class FrmCategoria extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            //D:\Duque\Tecnico\tec2\JEstoque
+            String diretorio = "C:\\Users\\ANTONIO ALVES\\JaspersoftWorkspace\\MyReports\\" ;
+            JasperReport relatorio = JasperCompileManager.compileReport(diretorio+"Categorias.jrxml");
+            JasperPrint jp = JasperFillManager.fillReport(relatorio, null, Conexao.getConnection());
+            JasperViewer jv = new JasperViewer(jp);
+            jv.setVisible(true);
+            jv.toFront();
+        } catch (JRException ex) {
+            Logger.getLogger(FrmCategoria.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmCategoria.class.getName()).log(Level.SEVERE, null, ex);
+        }
+   
+   
+
+
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
