@@ -5,7 +5,7 @@
  */
 package com.estoque.app;
 
-import com.estoque.app.models.Cliente;
+
 import com.estoque.app.views.FrmPrincipal;
 import javax.swing.JFrame;
 
