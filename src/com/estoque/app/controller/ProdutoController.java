@@ -24,19 +24,17 @@ public class ProdutoController implements ProdutoService {
 
     public static void main(String[] args) {
         Produto pro = new Produto();
-        pro.setNome("Xbox Series S");
-        pro.setPreco(2399.90);
-        pro.setQuantidade(5);
-        pro.setIdCategoria(1);
         pro.setId(1);
-
         ProdutoController pc
                 = new ProdutoController(pro);
 
-        if (pc.update()) {
-            System.out.println("Sucesso");
+        if (pc.findById()) {
+            System.out.println("id:"+ pro.getId());
+            System.out.println("Produto:"+ pro.getNome());
+            System.out.println("Preço:"+ pro.getPreco());
+            System.out.println("Estoque:"+ pro.getQuantidade());
         } else {
-            System.out.println("Erro.");
+            System.out.println("Não existem resultados.");
         }
 
     }
@@ -136,7 +134,29 @@ public class ProdutoController implements ProdutoService {
 
     @Override
     public boolean findById() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         String sql = "SELECT "
+                 + "nome, preco, quantidade, cod_categoria "
+                 + "FROM produto WHERE id = " + produto.getId();
+         try {
+            Connection con = Conexao.getConnection();
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery(sql); 
+            rs.next();
+            if(rs.getRow() > 0){
+                produto.setNome(rs.getString("nome"));
+                produto.setPreco(rs.getDouble("preco"));
+                produto.setQuantidade(rs.getDouble("quantidade"));
+                produto.setIdCategoria(rs.getInt("cod_categoria"));
+                return true;
+            }else{
+                System.out.println("Nenhum produto encontrado");
+                return false;
+            }
+            
+        } catch (SQLException error) {
+            error.printStackTrace();
+            return false;
+        }
     }
 
 }

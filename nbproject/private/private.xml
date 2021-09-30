@@ -2,6 +2,14 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/views/FrmProduto.java</file>
+            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/services/BancoService.java</file>
+            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/models/Produto.java</file>
+            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/services/CategoriaService.java</file>
+            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/controller/ProdutoController.java</file>
+            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/services/ProdutoService.java</file>
+            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/models/Categoria.java</file>
+        </group>
     </open-files>
 </project-private>
