@@ -22,19 +22,19 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmProduto extends javax.swing.JFrame {
 
-     private void consultaTabela() {
+    private void consultaTabela() {
         String sql = "SELECT "
                 + "p.id, "
                 + "p.nome, "
-                +"p.preco, "
-                +"p.quantidade,"
-                +"c.nome "
+                + "p.preco, "
+                + "p.quantidade,"
+                + "c.nome "
                 + "FROM  produto p, categoria c "
                 + "WHERE p.cod_categoria = c.id "
-                +"ORDER BY p.nome";
-        
-        String colunas[] = {"Id","Produto",
-            "Preço", "Quantidade","Categoria"};
+                + "ORDER BY p.nome";
+
+        String colunas[] = {"Id", "Produto",
+            "Preço", "Quantidade", "Categoria"};
         tabela.removeAll();
         try {
             Connection con = Conexao.getConnection();
@@ -54,9 +54,7 @@ public class FrmProduto extends javax.swing.JFrame {
                     rs.getString("p.nome"),
                     rs.getString("p.preco"),
                     rs.getString("p.quantidade"),
-                    rs.getString("c.nome"),
-                    
-                });
+                    rs.getString("c.nome"),});
             }
 
         } catch (SQLException error) {
@@ -65,6 +63,7 @@ public class FrmProduto extends javax.swing.JFrame {
                     + error.getMessage());
         }
     }
+
     public FrmProduto() {
         initComponents();
         Categoria.carregaCombo(cbxCategoria, -1);
@@ -98,11 +97,17 @@ public class FrmProduto extends javax.swing.JFrame {
         btnSalvar = new javax.swing.JButton();
         btnNovo = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         cbxCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel1.setText("Id do produto");
+
+        txtId.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIdKeyTyped(evt);
+            }
+        });
 
         btnBusca.setText("Busca ");
         btnBusca.addActionListener(new java.awt.event.ActionListener() {
@@ -115,7 +120,19 @@ public class FrmProduto extends javax.swing.JFrame {
 
         jLabel3.setText("Estoque");
 
+        txtQuantidade.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtQuantidadeKeyTyped(evt);
+            }
+        });
+
         jLabel4.setText("Preço");
+
+        txtPreco.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecoKeyTyped(evt);
+            }
+        });
 
         jLabel5.setText("Categoria");
 
@@ -130,11 +147,26 @@ public class FrmProduto extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tabela.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabela);
 
         btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -230,14 +262,14 @@ public class FrmProduto extends javax.swing.JFrame {
         Produto prod = new Produto();
         prod.setId(idProduto);
         ProdutoController pc = new ProdutoController(prod);
-        
-        if(pc.findById()){
+
+        if (pc.findById()) {
             idCategoria = prod.getIdCategoria();
             Categoria.carregaCombo(cbxCategoria, idCategoria);
             txtNome.setText(prod.getNome());
             txtPreco.setText(String.valueOf(prod.getPreco()));
             txtQuantidade.setText(String.valueOf(prod.getQuantidade()));
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null,
                     "A busca não retornou resultados.");
         }
@@ -254,33 +286,135 @@ public class FrmProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        
+
         Produto pro = new Produto();
         // Pego a entrada de dados vinda do usuario
-        Categoria cat = (Categoria)cbxCategoria.getSelectedItem();
+        Categoria cat = (Categoria) cbxCategoria.getSelectedItem();
         String nome = txtNome.getText();
         double preco = Double.valueOf(txtPreco.getText());
         double quantidade = Double.valueOf(txtQuantidade.getText());
-        
+
         //Passar os dados para o objeto pro
         //produto que será salvo dentro do banco de dados
         pro.setNome(nome);
         pro.setPreco(preco);
         pro.setQuantidade(quantidade);
         pro.setIdCategoria(cat.getId());
-        
+
         ProdutoController pc = new ProdutoController(pro);
-        
-        if(pc.save()){
+
+        if (pc.save()) {
             JOptionPane.showMessageDialog(null,
                     "Produto cadastrado com sucesso.");
             consultaTabela();
-        }else{
-           JOptionPane.showMessageDialog(null,
-                    "Erro ao cadastrar produto."); 
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Erro ao cadastrar produto.");
         }
-        
+
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void txtIdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdKeyTyped
+        // TODO add your handling code here:
+        String chars = "1234567890";
+        if (!chars.contains(evt.getKeyChar() + "")) {
+            evt.consume();
+        }
+
+    }//GEN-LAST:event_txtIdKeyTyped
+
+    private void txtQuantidadeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQuantidadeKeyTyped
+        // TODO add your handling code here:
+        String chars = "1234567890.";
+        if (!chars.contains(evt.getKeyChar() + "")) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtQuantidadeKeyTyped
+
+    private void txtPrecoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecoKeyTyped
+        // TODO add your handling code here:
+        String chars = "1234567890.";
+        if (!chars.contains(evt.getKeyChar() + "")) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPrecoKeyTyped
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        // TODO add your handling code here:
+        int cod = Integer.valueOf(txtId.getText());
+        String produto = txtNome.getText();
+        int opcao = JOptionPane
+                .showConfirmDialog(
+                        null,
+                        "Deseja excluir o produto " + produto + " ?",
+                        "Aviso de exclusão.",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE);
+
+        if (opcao == 0) {
+            System.out.println("Registro excluido.");
+            Produto pro = new Produto();
+            pro.setId(cod);
+            ProdutoController pc
+                    = new ProdutoController(pro);
+
+            if (pc.delete()) {
+                JOptionPane.showMessageDialog(null,
+                        "Produto excluido com sucesso!");
+                consultaTabela();
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Erro ao excluir o produto!");
+            }
+        } else {
+            System.out.println("Cancelado pelo usuario.");
+        }
+
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void tabelaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaMouseClicked
+        // TODO add your handling code here:
+        int linha = tabela.getSelectedRow();
+        String cod = tabela
+                .getModel()
+                .getValueAt(linha, 0).toString();
+        txtId.setText(cod);
+    }//GEN-LAST:event_tabelaMouseClicked
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        int cod = Integer.valueOf(txtId.getText());
+        int opcao = JOptionPane
+                .showConfirmDialog(null, "Deseja realmente alterar"
+                        + " \nas informações do produto?",
+                        "Alteração de produto.",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE);
+        
+        if(opcao == 0){
+           Produto pro = new Produto();
+           pro.setNome(txtNome.getText());
+           pro.setQuantidade(Double.valueOf(txtQuantidade.getText()));
+           pro.setPreco(Double.valueOf(txtPreco.getText()));
+           Categoria cat = (Categoria)cbxCategoria.getSelectedItem();
+           pro.setIdCategoria(cat.getId());
+           pro.setId(cod);
+           
+           ProdutoController pc = new ProdutoController(pro);
+           
+           if(pc.update()){
+               JOptionPane.showMessageDialog(null, 
+                       "Produto alterado com sucesso");
+               consultaTabela();
+           }else{
+               JOptionPane.showMessageDialog(null, 
+                       "Erro ao alterar o produto");
+           }   
+        }else{
+            JOptionPane.showMessageDialog(null, 
+                    "Cancelado pelo usuário");
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments
