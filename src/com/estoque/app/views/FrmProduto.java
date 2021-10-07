@@ -175,6 +175,9 @@ public class FrmProduto extends javax.swing.JFrame {
             }
         });
 
+        btnNovo.setBackground(new java.awt.Color(255, 255, 0));
+        btnNovo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnNovo.setForeground(new java.awt.Color(255, 51, 51));
         btnNovo.setText("Novo");
         btnNovo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
