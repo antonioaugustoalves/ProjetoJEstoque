@@ -44,12 +44,35 @@ public class LoginController {
                        rs.getString("nome"),
                        rs.getString("login"),
                        rs.getString("senha"));
+               return usuarioLogado;
+           }else{
+               return null;
            }
         }catch(SQLException erro){
-            
+            System.out.println("Usuario não cadastrado");
+            return null;
         }
     }
     
-    
+    public static void main(String[] args) {
+        String login = "vendas";
+        String senha = "2021";
+        
+        Usuario user = new Usuario();
+        user.setLogin(login);
+        user.setSenha(senha);
+        
+        LoginController lc = new LoginController(user);
+        
+        Usuario usuarioLogado = lc.efetuarLogin();
+        
+        if(usuarioLogado != null){
+            System.out.println("Login realizado com sucesso.");
+            System.out.println("Bem vindo, "+ 
+                    usuarioLogado.getNome());
+        }else{
+            System.out.println("Senha ou Usuario incorretos");
+        }
+    }
     
 }

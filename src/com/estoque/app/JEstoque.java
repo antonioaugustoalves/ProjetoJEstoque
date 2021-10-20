@@ -7,6 +7,7 @@ package com.estoque.app;
 
 
 //
+import com.estoque.app.views.FrmLogin;
 import com.estoque.app.views.FrmPrincipal;
 import javax.swing.JFrame;
 
@@ -20,8 +21,8 @@ public class JEstoque {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        FrmPrincipal form = new FrmPrincipal();
-        form.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        FrmLogin form = new FrmLogin();
+ 
         form.setLocationRelativeTo(form);
         form.setVisible(true);
         
