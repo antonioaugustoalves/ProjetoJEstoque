@@ -3,11 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/models/EnumTipoEndereco.java</file>
-            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/models/Cidade.java</file>
-            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/services/BancoService.java</file>
-            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/services/CidadeService.java</file>
-            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/controller/CidadeController.java</file>
+            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/views/FrmCategoria.java</file>
+            <file>file:/D:/Duque/Tecnico/tec2/JEstoque/src/com/estoque/app/views/JFTesteCaixa.java</file>
         </group>
     </open-files>
 </project-private>
