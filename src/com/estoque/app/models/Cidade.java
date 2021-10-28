@@ -5,6 +5,14 @@
  */
 package com.estoque.app.models;
 
+import com.etoque.app.db.Conexao;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ANTONIO
@@ -67,7 +75,38 @@ public class Cidade {
         this.estado = estado;
     }
     
-    
+    public static void carregaCombo(JComboBox combo, int id) {
+        String sql = "SELECT id, cidade, estado FROM cidade ORDER BY cidade";
+        try {
+            Connection con = Conexao.getConnection();
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            
+            combo.removeAllItems();//Apaga todos os itens
+            combo.addItem("SELECIONE A CIDADE");
+            Cidade cidadeSelecionada = null;
+            
+            //Preenchendo o JComboBox
+            while (rs.next()) {
+                Cidade cid = new Cidade(rs.getInt("id"),
+                        rs.getString("cidade").toUpperCase(),
+                        rs.getString("estado").toUpperCase());
+                
+                if (id == rs.getInt("id")) {
+                    cidadeSelecionada = cid;
+                }
+                combo.addItem(cid);
+            }
+            
+            if (cidadeSelecionada != null) {
+                combo.setSelectedItem(cidadeSelecionada);
+            }
+        } catch (SQLException error) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro ao carregar a lista de cidades.");
+        }
+        
+    }
    
 
 }

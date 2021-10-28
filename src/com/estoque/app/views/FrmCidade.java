@@ -21,9 +21,40 @@ import javax.swing.table.DefaultTableModel;
  * @author ANTONIO
  */
 public class FrmCidade extends javax.swing.JFrame {
+    private void filtrar(){
+        String sql = "SELECT id, cidade, estado "
+                +"FROM cidade WHERE UPPER(cidade) LIKE '%"
+                +txtBusca.getText().toUpperCase()+"%'";
+        String colunas[] = {"Id", "Cidade","Estado"};
+        tabela.removeAll();
+        try {
+            Connection con = Conexao.getConnection();
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery(sql);
+            //Matriz da tabela do Banco de dados
+            Object[][] dados = { ,
+            };
+          tabela.setModel(new DefaultTableModel(dados, colunas) {
+            });
+          DefaultTableModel dtm = (DefaultTableModel) tabela.getModel();
 
+            //Preenchendo os dados na tabela do Form
+            while (rs.next()) {
+                dtm.addRow(new String[]{
+                    rs.getString("id"),
+                    rs.getString("cidade"),
+                    rs.getString("estado")
+                });
+            }
+
+        } catch (SQLException error) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro ao carregar os dados do servidor:\n"
+                    + error.getMessage());
+        }
+    }
     private void consultaTabela() {
-        String sql = "SELECT id, cidade, estado FROM cidade ";
+        String sql = "SELECT id,  cidade, estado FROM cidade ";
                
         String colunas[] = {"Id", "Cidade","Estado"};
         tabela.removeAll();
@@ -80,13 +111,13 @@ public class FrmCidade extends javax.swing.JFrame {
         txtEstado = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jButton7 = new javax.swing.JButton();
+        txtBusca = new javax.swing.JTextField();
+        btnFiltro = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabela = new javax.swing.JTable();
 
@@ -120,9 +151,19 @@ public class FrmCidade extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Editar");
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Excluir");
+        btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Buscar por Id");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -156,9 +197,9 @@ public class FrmCidade extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -182,8 +223,8 @@ public class FrmCidade extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(btnSalvar)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(btnEditar)
+                    .addComponent(btnExcluir))
                 .addContainerGap(197, Short.MAX_VALUE))
         );
 
@@ -191,7 +232,21 @@ public class FrmCidade extends javax.swing.JFrame {
 
         jLabel4.setText("Filtrar por nome:");
 
-        jButton7.setText("OK");
+        txtBusca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscaKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBuscaKeyTyped(evt);
+            }
+        });
+
+        btnFiltro.setText("OK");
+        btnFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltroActionPerformed(evt);
+            }
+        });
 
         tabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -204,6 +259,11 @@ public class FrmCidade extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tabela.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabela);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -214,9 +274,9 @@ public class FrmCidade extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jScrollPane1)
         );
@@ -226,8 +286,8 @@ public class FrmCidade extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7))
+                    .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnFiltro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -312,6 +372,84 @@ public class FrmCidade extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtEstadoKeyReleased
 
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int cod = Integer.valueOf(txtId.getText());
+        String nome = txtCidade.getText();
+        String uf = txtEstado.getText();
+        Cidade cidade = new Cidade();
+        cidade.setId(cod);
+        cidade.setCidade(nome);
+        cidade.setEstado(uf);
+        
+        CidadeController bean = 
+                new CidadeController(cidade);
+        
+        if(bean.update()){
+            JOptionPane.showMessageDialog(null,
+                    "Registro alterado.");
+            consultaTabela();
+            jTabbedPane1.setSelectedIndex(1);
+        }else{
+            JOptionPane.showMessageDialog(null,
+                    "Erro ao alterar registro.");
+        }
+      
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        // TODO add your handling code here:
+        int cod = Integer.valueOf(txtId.getText());
+        Cidade cidade = new Cidade();
+        cidade.setId(cod);
+        
+        CidadeController bean = 
+                new CidadeController(cidade);
+        
+        if(bean.delete()){
+            JOptionPane.showMessageDialog(null, 
+                    "Registro excluído!");
+            consultaTabela();
+            txtId.setText("");
+            txtCidade.setText("");
+            txtEstado.setText("");
+            jTabbedPane1.setSelectedIndex(1);
+            
+        }else{
+            JOptionPane.showMessageDialog(null, 
+                    "Erro ao excluir registro!");
+        }
+        
+        
+        
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void tabelaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaMouseClicked
+        // TODO add your handling code here:
+        int linha = tabela.getSelectedRow();
+        String cod = tabela.getModel()
+                .getValueAt(linha,0).toString();
+        txtId.setText(cod);
+        jTabbedPane1.setSelectedIndex(0);
+    }//GEN-LAST:event_tabelaMouseClicked
+
+    private void btnFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltroActionPerformed
+        // TODO add your handling code here:
+        filtrar();
+        
+    }//GEN-LAST:event_btnFiltroActionPerformed
+
+    private void txtBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscaKeyReleased
+        // TODO add your handling code here:
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            filtrar();
+        }
+    }//GEN-LAST:event_txtBuscaKeyReleased
+
+    private void txtBuscaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscaKeyTyped
+        // TODO add your handling code here:
+        filtrar();
+    }//GEN-LAST:event_txtBuscaKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -348,13 +486,13 @@ public class FrmCidade extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnFiltro;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -363,8 +501,8 @@ public class FrmCidade extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTable tabela;
+    private javax.swing.JTextField txtBusca;
     private javax.swing.JTextField txtCidade;
     private javax.swing.JTextField txtEstado;
     private javax.swing.JTextField txtId;
