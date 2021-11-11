@@ -35,14 +35,51 @@ public class ClienteController implements BancoService{
         cli.setId(3);
         
         ClienteController bean = new ClienteController(cli);
-        
+        /**
         if(bean.delete()){
             System.out.println("Sucesso");
         }else{
             System.out.println("Erro.");
+        }**/
+        
+       int total = bean.counterRecord();
+       
+        System.out.println("Last:"+total);
+        
+        
+    }
+    
+    public int getLastIndex(){
+        int id = 0;
+        String sql = "select max(id) from "
+                +"cliente";
+        try{
+            Connection con = Conexao.getConnection();
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery(sql);
+            rs.next();
+            id = rs.getInt("max(id)");
+        }catch(SQLException erro){
+            erro.printStackTrace();
         }
         
+        return id;
+    }
+    
+    public int counterRecord(){
+        int total = 0;
+        String  sql= "SELECT count(*) from cliente";
+        try{
+            Connection con = Conexao.getConnection();
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery(sql);
+            rs.next();
+            total = rs.getInt("count(*)");
+        }catch(SQLException erro){
+            erro.printStackTrace();
+        }
         
+        return total;
     }
 
     @Override
