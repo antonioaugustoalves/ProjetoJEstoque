@@ -11,8 +11,14 @@ import com.estoque.app.models.Cidade;
 import com.estoque.app.models.Cliente;
 import com.estoque.app.models.Endereco;
 import com.estoque.app.models.EnumTipoEndereco;
+import com.etoque.app.db.Conexao;
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * Tela de cadastro de clientes
@@ -46,6 +52,7 @@ public class FrmCliente extends javax.swing.JFrame {
         Cliente cli = new Cliente();
         ClienteController bean = new ClienteController(cli);
         int total = bean.counterRecord();
+        
         if(total == 0){
             lblTotal.setForeground(Color.red);
             return "Sem registros!";
@@ -57,10 +64,50 @@ public class FrmCliente extends javax.swing.JFrame {
         }
     }
     
+    private void consultaTabela() {
+        String sql = "SELECT id, nome,telefone, "
+                + "email, data_nasc, cpf "
+                + "FROM cliente ";
+               
+        String colunas[] = {"Id", "Nome",
+            "Telefone","Email","Nascimento", "CPF"};
+        tabela.removeAll();
+        try {
+            Connection con = Conexao.getConnection();
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery(sql);
+            //Matriz da tabela do Banco de dados
+            Object[][] dados = { ,
+            };
+          tabela.setModel(new DefaultTableModel(dados, colunas) {
+            });
+          DefaultTableModel dtm = (DefaultTableModel) tabela.getModel();
+
+            //Preenchendo os dados na tabela do Form
+            while (rs.next()) {
+                dtm.addRow(new String[]{
+                    rs.getString("id"),
+                    rs.getString("nome"),
+                    rs.getString("telefone"),
+                    rs.getString("email"),
+                    rs.getString("data_nasc"),
+                    rs.getString("cpf")
+                    
+                });
+            }
+
+        } catch (SQLException error) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro ao carregar os dados do servidor:\n"
+                    + error.getMessage());
+        }
+    }
+    
     public FrmCliente() {
         initComponents();
         limparCampos();
         lblTotal.setText(getTotalRecords());
+        consultaTabela();
     }
 
     /**
@@ -109,7 +156,7 @@ public class FrmCliente extends javax.swing.JFrame {
         jTextField6 = new javax.swing.JTextField();
         jButton5 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tabela = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -314,7 +361,7 @@ public class FrmCliente extends javax.swing.JFrame {
 
         jButton5.setText("Buscar");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -325,7 +372,7 @@ public class FrmCliente extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tabela);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -482,11 +529,16 @@ public class FrmCliente extends javax.swing.JFrame {
             EnderecoController eb = 
                     new EnderecoController(endereco);
             eb.save();
-            getTotalRecords();
+            String totalRecords = getTotalRecords();
+            lblTotal.setText(totalRecords);
+            consultaTabela();
+            
         }else{
-            JOptionPane.showMessageDialog(null, "Erro ao salvar cliente");
+            JOptionPane.showMessageDialog(null, 
+                    "Erro ao salvar cliente");
         }
-        
+                
+                
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -554,11 +606,11 @@ public class FrmCliente extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JRadioButton rbComercial;
     private javax.swing.JRadioButton rbResidencial;
+    private javax.swing.JTable tabela;
     private javax.swing.JTextField txtBairro;
     private javax.swing.JTextField txtCep;
     private javax.swing.JTextField txtComplemento;

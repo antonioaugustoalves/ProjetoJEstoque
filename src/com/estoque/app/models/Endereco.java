@@ -111,4 +111,12 @@ public class Endereco {
         System.out.println("Tipo:"
         +casa.getTipoEndereco());
     }
+
+    @Override
+    public String toString() {
+        return "Endereco{" + "id=" + this.id + ", logradouro=" + this.logradouro + ", numero=" + this.numero + ", complemento=" + this.complemento + ", bairro=" + this.bairro + ", cep=" + this.cep + ", codCidade=" + this.codCidade + ", codCliente=" + this.codCliente + ", tipoEndereco=" + this.tipoEndereco + '}';
+    }
+    
+    
+    
 }

@@ -151,5 +151,111 @@ public class EnderecoController implements BancoService {
             return false;
         }
     }
+    
+    
+    public Endereco findAddressByClient(String nome){
+        String sql = "SELECT e.id," +
+"	e.logradouro," +
+"	e.numero, "+
+"	e.complemento," +
+"	e.bairro, " +
+"	e.cep, " +
+"	cid.cidade," +
+"	e.tipo_endereco," +
+"       e.cod_cidade, "+                
+"	cli.nome " +
+"        from " +
+"	endereco e, " +
+"	cidade cid, " +
+"	cliente cli " +
+"       where e.cod_cidade = cid.id " +
+"       and e.cod_cliente = cli.id " +
+"       and upper(cli.nome) like upper('%"+nome+"%')";
+        
+        Endereco enderecoProcurado = new Endereco();//objeto vazio
+        try{
+         Connection con = Conexao.getConnection();
+         Statement stm = con.createStatement();
+         ResultSet rs = stm.executeQuery(sql);
+         rs.next(); //Pega o resultado encontrado.
+         
+         if(rs.getRow() > 0){
+             
+             enderecoProcurado
+                     .setLogradouro(rs.getString("e.logradouro"));
+             enderecoProcurado.setNumero(rs.getString("e.numero"));
+             enderecoProcurado
+                     .setComplemento(rs.getString("e.complemento"));
+             enderecoProcurado.setBairro(rs.getString("e.bairro"));
+             enderecoProcurado.setCodCidade(rs.getInt("e.cod_cidade"));
+             enderecoProcurado.setCep(rs.getString("e.cep"));
+             String tipoEndereco = rs.getString("e.tipo_endereco");
+         
+             enderecoProcurado.setTipoEndereco(
+                     tipoEndereco.equals("COMERCIAL")?EnumTipoEndereco.COMERCIAL
+                             :EnumTipoEndereco.RESIDENCIAL);
+             
+             
+         }
+        }catch(SQLException erro){
+            erro.printStackTrace();
+            return null;
+        }
+        return enderecoProcurado;
+        
+    }
+    
+    
+    public Endereco findAddressByClient(int cod){
+        String sql = "SELECT e.id," +
+"	e.logradouro," +
+"	e.numero, "+
+"	e.complemento," +
+"	e.bairro, " +
+"	e.cep, " +
+"	cid.cidade," +
+"	e.tipo_endereco," +
+"       e.cod_cidade, "+                
+"	cli.nome " +
+"        from " +
+"	endereco e, " +
+"	cidade cid, " +
+"	cliente cli " +
+"       where e.cod_cidade = cid.id " +
+"       and e.cod_cliente = cli.id " +
+"       and e.cod_cliente = "+ cod;
+        
+        Endereco enderecoProcurado = new Endereco();//objeto vazio
+        try{
+         Connection con = Conexao.getConnection();
+         Statement stm = con.createStatement();
+         ResultSet rs = stm.executeQuery(sql);
+         rs.next(); //Pega o resultado encontrado.
+         
+         if(rs.getRow() > 0){
+             
+             enderecoProcurado
+                     .setLogradouro(rs.getString("e.logradouro"));
+             enderecoProcurado.setNumero(rs.getString("e.numero"));
+             enderecoProcurado
+                     .setComplemento(rs.getString("e.complemento"));
+             enderecoProcurado.setBairro(rs.getString("e.bairro"));
+             enderecoProcurado.setCodCidade(rs.getInt("e.cod_cidade"));
+             enderecoProcurado.setCep(rs.getString("e.cep"));
+             String tipoEndereco = rs.getString("e.tipo_endereco");
+         
+             enderecoProcurado.setTipoEndereco(
+                     tipoEndereco.equals("COMERCIAL")?EnumTipoEndereco.COMERCIAL
+                             :EnumTipoEndereco.RESIDENCIAL);
+             
+             
+         }
+        }catch(SQLException erro){
+            erro.printStackTrace();
+            return null;
+        }
+        return enderecoProcurado;
+        
+    }
 
 }
